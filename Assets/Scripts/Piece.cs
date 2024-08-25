@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using grid;
 
-namespace piecesFake
+namespace pieces
 {
-    public class pieceClass : MonoBehaviour
+        public class piece : MonoBehaviour
     {
         public GameObject highlight;
         public GameObject selector;
@@ -25,6 +26,16 @@ namespace piecesFake
         public bool selected = false;
         public Vector2 destination;
 
+
+        public gridScript gridRef;
+        private Vector2 startPos = new Vector2(1,2);
+        public static Vector2[] moveDir1 = new Vector2[2] {new Vector2(0,1), new Vector2(0,2)};
+        private static Vector2[] moveDir2 = new Vector2[2] {new Vector2(1,0), new Vector2(2,0)};
+        private static Vector2[] moveDir3 = new Vector2[2] {new Vector2(-1,0), new Vector2(-2,0)};
+        private Vector2[][] availMoveRaw = new Vector2[3][] {moveDir1, moveDir2, moveDir3};
+
+
+
         
 
         // Start is called before the first frame update
@@ -34,15 +45,22 @@ namespace piecesFake
             selectorSpriteRenderer = selector.GetComponent<SpriteRenderer>();
         }
 
+
+
         // Update is called once per frame
         void Update()
         {
-            
+            if (!gridRef.active && selected) unHighlight();
         }
 
         void FixedUpdate()
         {
 
+        }
+
+        void OnMouseDown()
+        {
+            if (gridRef.active) act(currPos, availMoveRaw, gridRef.positionsDict, false);
         }
 
 
@@ -121,4 +139,5 @@ namespace piecesFake
             }
         }
     }
+
 }
